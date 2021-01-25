@@ -1,4 +1,4 @@
-import Axios from 'axios';
+import axios from 'axios';
 
 export const fetchShow = () => {
   axios
@@ -6,7 +6,11 @@ export const fetchShow = () => {
       'https://api.tvmaze.com/singlesearch/shows?q=stranger-things&embed=episodes'
     )
     .then((res) => {
-      setShow(res.data);
-      setSeasons(formatSeasons(res.data._embedded.episodes));
+      // console.log('axios call data', res);
+      return res;
+    })
+    .catch((err) => {
+      console.error('error fetching data from api, err: ', err.message);
+      return err;
     });
 };
