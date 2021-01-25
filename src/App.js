@@ -29,13 +29,19 @@ export default function App() {
   //   fetchShow();
   // }, []);
 
+  // async function fetchData()
+
   useEffect(() => {
-    async function fetchData() {
-      const res = await fetchShow();
-      console.log('Await Data', res);
-      setShow(res.data);
-      setSeasons(formatSeasons(res.data._embedded.episodes));
-    }
+    const fetchData = async () => {
+      try {
+        const res = await fetchShow();
+        console.log('AWAIT RES', res);
+        setShow(res.data);
+        setSeasons(formatSeasons(res.data._embedded.episodes));
+      } catch (err) {
+        console.error('error fetching data from api, err: ', err.message);
+      }
+    };
     fetchData();
   }, []);
 
