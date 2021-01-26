@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import App from '../App';
 import Episodes from './Episodes';
 
 const dummyEpisodes = [
@@ -28,19 +29,23 @@ test('Episodes component renders with no season selected', () => {
   expect(episodeObj).toStrictEqual([]);
 });
 
-test('Episodes component renders when season is selected', async () => {
+test('Episodes component renders when Episodes state is changed', async () => {
   //Arrange
   const { rerender } = render(<Episodes episodes={[]} />);
-
+  //Act
   let episodeObj = screen.queryAllByTestId('episodeTest');
 
   rerender(<Episodes episodes={dummyEpisodes} />);
 
   episodeObj = screen.queryAllByTestId('episodeTest');
   expect(episodeObj).toHaveLength(2);
+});
 
-  // //Act
-  // let dropDown = await screen.getByText(/select a season/i);
-  // //Assert
-  // userEvent.click(dropDown);
+test('Episodes Dropdown menu can be clicked', async () => {
+  //Arrange
+  render(<App />);
+  //Act
+  let dropDown = await screen.findByText(/Select a season/i);
+  //Assert
+  userEvent.click(dropDown);
 });
