@@ -1,34 +1,51 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import Dropdown from "react-dropdown";
-import parse from "html-react-parser";
+import React, { useState, useEffect } from 'react';
+// import axios from 'axios';
+import Dropdown from 'react-dropdown';
+import parse from 'html-react-parser';
+import { fetchShow } from './api/fetchShow';
 
-import { formatSeasons } from "./utils/formatSeasons";
+import { formatSeasons } from './utils/formatSeasons';
 
-import Episodes from "./components/Episodes";
-import "./styles.css";
+import Episodes from './components/Episodes';
+import './styles.css';
 
 export default function App() {
   const [show, setShow] = useState(null);
   const [seasons, setSeasons] = useState([]);
-  const [selectedSeason, setSelectedSeason] = useState("");
+  const [selectedSeason, setSelectedSeason] = useState('');
   const episodes = seasons[selectedSeason] || [];
 
+  // useEffect(() => {
+  //   const fetchShow = () => {
+  //     axios
+  //       .get(
+  //         "https://api.tvmaze.com/singlesearch/shows?q=stranger-things&embed=episodes"
+  //       )
+  //       .then(res => {
+  //         setShow(res.data);
+  //         setSeasons(formatSeasons(res.data._embedded.episodes));
+  //       });
+  //   };
+  //   fetchShow();
+  // }, []);
+
+  // async function fetchData()
+
   useEffect(() => {
-    const fetchShow = () => {
-      axios
-        .get(
-          "https://api.tvmaze.com/singlesearch/shows?q=stranger-things&embed=episodes"
-        )
-        .then(res => {
-          setShow(res.data);
-          setSeasons(formatSeasons(res.data._embedded.episodes));
-        });
+    const fetchData = async () => {
+      try {
+        const res = await fetchShow();
+        console.log('AWAIT RES', res);
+        setShow(res.data);
+        setSeasons(formatSeasons(res.data._embedded.episodes));
+      } catch (err) {
+        console.error('error fetching data from api, err: ', err.message);
+      }
     };
-    fetchShow();
+    fetchData();
   }, []);
 
-  const handleSelect = e => {
+  const handleSelect = (e) => {
     setSelectedSeason(e.value);
   };
 
@@ -44,7 +61,7 @@ export default function App() {
       <Dropdown
         options={Object.keys(seasons)}
         onChange={handleSelect}
-        value={selectedSeason || "Select a season"}
+        value={selectedSeason || 'Select a season'}
         placeholder="Select an option"
       />
       <Episodes episodes={episodes} />
