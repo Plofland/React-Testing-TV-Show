@@ -13,7 +13,7 @@ export default function App() {
   const [show, setShow] = useState(null);
   const [seasons, setSeasons] = useState([]);
   const [selectedSeason, setSelectedSeason] = useState('');
-  const episodes = seasons[selectedSeason] || [];
+  const episodes = seasons[selectedSeason] || []; //derived state = derived from props or state
 
   useEffect(() => {
     const fetchData = async () => {
